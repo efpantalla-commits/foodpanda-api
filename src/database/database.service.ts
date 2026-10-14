@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-import * as path from 'path';
+
 import { Injectable } from '@nestjs/common';
 import mysql from 'mysql2/promise';
 
@@ -12,12 +11,9 @@ export class DatabaseService {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: {
-  ca: fs.readFileSync(
-    path.join(process.cwd(), 'certs', 'ca.pem'),
-    'utf8',
-  ),
-  rejectUnauthorized: true,
-},
+      ca: process.env.DB_SSL_CA,
+      rejectUnauthorized: true,
+    },
     waitForConnections: true,
     connectionLimit: 10,
   });
