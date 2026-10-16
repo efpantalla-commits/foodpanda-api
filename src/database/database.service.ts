@@ -13,7 +13,9 @@ export class DatabaseService {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: {
-      ca: readFileSync(join(process.cwd(), 'certs', 'ca.pem')),
+      ca: process.env.DB_CA_CERT
+        ? process.env.DB_CA_CERT.replace(/\\n/g, '\n')
+        : readFileSync(join(process.cwd(), 'certs', 'ca.pem'), 'utf8'),
       rejectUnauthorized: true,
     },
     waitForConnections: true,
@@ -24,4 +26,4 @@ export class DatabaseService {
     const [rows] = await this.pool.execute(sql, params);
     return rows;
   }
-} 
+}
