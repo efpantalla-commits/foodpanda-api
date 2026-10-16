@@ -1,4 +1,6 @@
 
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import mysql from 'mysql2/promise';
 
@@ -11,7 +13,7 @@ export class DatabaseService {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: {
-      ca: process.env.DB_SSL_CA,
+      ca: readFileSync(join(process.cwd(), 'certs', 'ca.pem')),
       rejectUnauthorized: true,
     },
     waitForConnections: true,
@@ -22,4 +24,4 @@ export class DatabaseService {
     const [rows] = await this.pool.execute(sql, params);
     return rows;
   }
-}
+} 
