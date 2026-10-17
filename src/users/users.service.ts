@@ -28,6 +28,35 @@ export class UsersService {
     );
   }
 
+  async login(email: string, password: string) {
+    const result: any = await this.databaseService.query(
+      'SELECT user_id, full_name, email, password_hash, phone_number, role FROM Users WHERE email = ?',
+      [email],
+    );
+
+    if (!result || result.length === 0) {
+      return { message: 'Invalid email or password' };
+    }
+
+    const user = result[0];
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.password_hash,
+    );
+
+    if (!isPasswordValid) {
+      return { message: 'Invalid email or password' };
+    }
+
+    const { password_hash, ...userWithoutPassword } = user;
+
+    return {
+      message: 'Login successful',
+      user: userWithoutPassword,
+    };
+  }
+
   async update(
     user_id: number,
     full_name: string,

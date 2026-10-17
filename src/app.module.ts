@@ -4,8 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseService } from './database/database.service';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
 import { RestaurantsController } from './restaurants/restaurants.controller';
 import { CategoriesController } from './categories/categories.controller';
 import { MenuItemsController } from './menu-items/menu-items.controller';
@@ -13,12 +11,17 @@ import { OrdersController } from './orders/orders.controller';
 import { OrderItemsController } from './order-items/order-items.controller';
 import { DeliveriesController } from './deliveries/deliveries.controller';
 import { PaymentsController } from './payments/payments.controller';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    UsersModule,
+    AuthModule,
+  ],
   controllers: [
     AppController,
-    UsersController,
     RestaurantsController,
     CategoriesController,
     MenuItemsController,
@@ -27,6 +30,6 @@ import { PaymentsController } from './payments/payments.controller';
     DeliveriesController,
     PaymentsController,
   ],
-  providers: [AppService, DatabaseService, UsersService],
+  providers: [AppService, DatabaseService],
 })
 export class AppModule {}
