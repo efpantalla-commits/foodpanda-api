@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 
 @Controller('restaurants')
@@ -56,6 +66,17 @@ export class RestaurantsController {
     );
   }
 
+  @Patch(':id/assign-owner')
+  async assignOwner(
+    @Param('id') id: string,
+    @Body() body: { owner_id: number },
+  ) {
+    return await this.databaseService.query(
+      'UPDATE Restaurants SET owner_id = ? WHERE restaurant_id = ?',
+      [Number(body.owner_id), Number(id)],
+    );
+  }
+
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.databaseService.query(
@@ -64,4 +85,3 @@ export class RestaurantsController {
     );
   }
 }
-
